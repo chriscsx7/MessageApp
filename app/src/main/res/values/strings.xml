@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">MessageApp</string>
+    <string name="dev_name">CDDEV</string>
+
+    <string name="login_btn">Ingresar</string>
+    <string name="registrar_btn">Registrarse</string>
+    <string name="prompt_email">Correo</string>
+    <string name="prompt_password">Contraseña</string>
+    <string name="action_sign_in">Iniciar sesión</string>
+    <string name="action_sign_in_short">Iniciar sesión</string>
+    <string name="cerrar_sesion">Cerrar sesión</string>
+</resources>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:gravity="start"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+    <TextView
+            android:id="@+id/textViewMessageReceived"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bubble_received"
+            android:padding="10dp"
+            android:text="Mensaje recibido"
+            android:textColor="@android:color/white" />
+</LinearLayout>

@@ -11,8 +11,6 @@ import com.cddev.messageapp.R
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.messaging
 
 class MainActivity: AppCompatActivity() {
@@ -37,7 +35,6 @@ class MainActivity: AppCompatActivity() {
         }
         init()
         createNotificationChannel()
-        saveFcmToken()
     }
 
     private fun init() {
@@ -77,28 +74,6 @@ class MainActivity: AppCompatActivity() {
             channel.description = "Canal de notificaciones de MessageApp"
             val notificationManager = getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(channel)
-        }
-    }
-
-    fun saveFcmToken() {
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        if (currentUser != null) {
-            val userId = currentUser.uid
-            FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val token = task.result
-                    val databaseRef = FirebaseDatabase.getInstance().getReference("Usuarios/$userId")
-                    databaseRef.child("fcmToken").setValue(token)
-                        .addOnSuccessListener {
-                            println("Token FCM guardado exitosamente.")
-                        }
-                        .addOnFailureListener { e ->
-                            println("Error al guardar el token FCM: ${e.message}")
-                        }
-                } else {
-                    println("Error al obtener el token FCM: ${task.exception?.message}")
-                }
-            }
         }
     }
 }

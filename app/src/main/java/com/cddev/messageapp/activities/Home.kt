@@ -19,6 +19,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.messaging.FirebaseMessaging
 
 class Home : AppCompatActivity() {
 
@@ -41,6 +42,8 @@ class Home : AppCompatActivity() {
         }
         recyclerViewUsersHome.adapter = userAdapter
         recyclerViewUsersHome.layoutManager = LinearLayoutManager(this)
+
+        saveFcmToken()
 
         // Cargar usuarios desde Firebase
         loadUsers()
@@ -154,5 +157,27 @@ class Home : AppCompatActivity() {
             return if (currentUserId < userId) "$currentUserId$userId" else "$userId$currentUserId"
         }
         return "" // Retornar cadena vacía si el usuario no está autenticado o el ID es vacío
+    }
+
+    fun saveFcmToken() {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser != null) {
+            val userId = currentUser.uid
+            FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val token = task.result
+                    val databaseRef = FirebaseDatabase.getInstance().getReference("Usuarios/$userId")
+                    databaseRef.child("fcmToken").setValue(token)
+                        .addOnSuccessListener {
+                            println("Token FCM guardado exitosamente.")
+                        }
+                        .addOnFailureListener { e ->
+                            println("Error al guardar el token FCM: ${e.message}")
+                        }
+                } else {
+                    println("Error al obtener el token FCM: ${task.exception?.message}")
+                }
+            }
+        }
     }
 }

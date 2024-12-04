@@ -28,9 +28,11 @@ class UserAdapter(
 
     class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val userName: TextView = itemView.findViewById(R.id.textViewUserName)
+        private val email: TextView = itemView.findViewById(R.id.textViewEmail)
 
         fun bind(user: User, onUserClick: (User) -> Unit) {
             userName.text = user.username
+            email.text = user.email
             itemView.setOnClickListener {
                 // Aquí se maneja el clic y se navega a la actividad de chat
                 onUserClick(user)

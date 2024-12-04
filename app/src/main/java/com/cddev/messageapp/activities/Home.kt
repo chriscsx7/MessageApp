@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cddev.messageapp.R
 import com.cddev.messageapp.adapter.UserAdapter
+import com.cddev.messageapp.model.Message
 import com.cddev.messageapp.model.User
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
@@ -48,6 +49,7 @@ class Home : AppCompatActivity() {
         fabAddChat.setOnClickListener {
             // Abrir actividad para agregar chat
             startActivity(Intent(this, AddChatActivity::class.java))
+            finish()
         }
     }
 
@@ -59,24 +61,29 @@ class Home : AppCompatActivity() {
             return
         }
 
-        val database = FirebaseDatabase.getInstance().reference.child("Usuarios")
+        val databaseMessage = FirebaseDatabase.getInstance().reference.child("messages")
 
-        database.addValueEventListener(object : ValueEventListener {
+        databaseMessage.addListenerForSingleValueEvent(object : ValueEventListener {
+            private var receiverId: String? = null
+            private var senderId: String? = null
+            private var lastMsg: String? = null
             override fun onDataChange(snapshot: DataSnapshot) {
-                userList.clear()
-
-                for (userSnapshot in snapshot.children) {
-                    val user = userSnapshot.getValue(User::class.java)
-                    if (user != null && user.id != currentUserId) {
-                        userList.add(user)
+                for (snapshot in snapshot.children) {
+                    for (messageSnapshot in snapshot.children) {
+                        val message = messageSnapshot.getValue(Message::class.java)
+                        if (message != null && (message.receiverId == currentUserId || message.senderId == currentUserId)) {
+                            receiverId = message.receiverId
+                            senderId = message.senderId
+                            lastMsg = message.text
+                        }
+                    }
+                    if (receiverId != null && senderId != null) {
+                        getUserFromMessage(Message(senderId = senderId!!, receiverId = receiverId!!), currentUserId)
                     }
                 }
-
-                userAdapter.notifyDataSetChanged()
             }
-
             override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(this@Home, "Error al cargar usuarios: ${error.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@Home, "Error al cargar mensajes recientes: ${error.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -120,10 +127,31 @@ class Home : AppCompatActivity() {
         }
     }
 
+    private fun getUserFromMessage(message: Message, currentUserId: String) {
+        val otherUserId = if (message.senderId == currentUserId) message.receiverId else message.senderId
+        val databaseUser = FirebaseDatabase.getInstance().reference.child("Usuarios").child(otherUserId)
+        databaseUser.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val user = snapshot.getValue(User::class.java)
+                if (user != null) {
+                    // Verificar si el usuario ya está en la lista
+                    if (userList.none { it.id == user.id }) {
+                        userList.add(user)
+                        userAdapter.notifyDataSetChanged()
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@Home, "Error al cargar usuarios: ${error.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
     private fun generateChatId(userId: String): String {
         val currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
         if (currentUserId.isNotEmpty() && userId.isNotEmpty()) {
-            return if (currentUserId < userId) "$currentUserId:$userId" else "$userId:$currentUserId"
+            return if (currentUserId < userId) "$currentUserId$userId" else "$userId$currentUserId"
         }
         return "" // Retornar cadena vacía si el usuario no está autenticado o el ID es vacío
     }

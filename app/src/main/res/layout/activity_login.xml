@@ -13,9 +13,17 @@
             android:gravity="center"
             android:padding="10dp">
 
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_login"
+                android:layout_marginBottom="20dp"/>
+
         <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                style="@style/EditTextStyle"
+                android:layout_marginBottom="20dp">
 
             <EditText
                     android:id="@+id/login_editText_email"
@@ -25,13 +33,16 @@
                     android:inputType="textEmailAddress"
                     android:drawableStart="@drawable/ic_email"
                     android:drawablePadding="10dp"
-                    android:padding="20dp"/>
+                    android:padding="20dp"
+                    style="@style/EditTextFieldStyle"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:passwordToggleEnabled="true">
+                app:passwordToggleEnabled="true"
+                style="@style/EditTextStyle"
+                android:layout_marginBottom="40dp">
 
             <EditText
                     android:id="@+id/login_editText_password"
@@ -43,7 +54,8 @@
                     android:inputType="textPassword"
                     android:drawableStart="@drawable/ic_password_app"
                     android:drawablePadding="10dp"
-                    android:padding="20dp"/>
+                    android:padding="20dp"
+                    style="@style/EditTextFieldStyle"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
@@ -52,6 +64,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="@string/action_sign_in"
-                android:backgroundTint="@color/blue_light"/>
+                android:backgroundTint="@color/blue_light"
+                android:padding="16dp"
+        />
     </LinearLayout>
 </RelativeLayout>

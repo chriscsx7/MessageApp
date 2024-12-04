@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="EditTextStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxBackgroundColor">@color/white</item>
+        <item name="boxStrokeColor">@color/blue_200</item>
+        <item name="hintTextColor">@color/blue_500</item>
+        <item name="android:textColor">@color/blue_light</item>
+        <item name="android:textColorHint">@color/blue_500</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="EditTextFieldStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:drawablePadding">10dp</item>
+    </style>
+</resources>

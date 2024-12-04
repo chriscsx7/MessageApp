@@ -8,6 +8,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.cddev.messageapp.R
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.messaging.FirebaseMessaging
 
 class Login: AppCompatActivity() {
     private lateinit var login_editText_email: EditText
@@ -23,6 +25,7 @@ class Login: AppCompatActivity() {
         login_loginBtn.setOnClickListener {
             validarDatos()
         }
+        saveFcmToken()
     }
 
     private fun init() {
@@ -65,5 +68,27 @@ class Login: AppCompatActivity() {
 
     private fun toast(mensaje: String) {
         Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show()
+    }
+
+    fun saveFcmToken() {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser != null) {
+            val userId = currentUser.uid
+            FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val token = task.result
+                    val databaseRef = FirebaseDatabase.getInstance().getReference("Usuarios/$userId")
+                    databaseRef.child("fcmToken").setValue(token)
+                        .addOnSuccessListener {
+                            println("Token FCM guardado exitosamente.")
+                        }
+                        .addOnFailureListener { e ->
+                            println("Error al guardar el token FCM: ${e.message}")
+                        }
+                } else {
+                    println("Error al obtener el token FCM: ${task.exception?.message}")
+                }
+            }
+        }
     }
 }

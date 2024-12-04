@@ -10,6 +10,7 @@ import com.cddev.messageapp.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.messaging.FirebaseMessaging
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -83,8 +84,6 @@ class Register : AppCompatActivity() {
                     hashMap["id"] = uid
                     hashMap["username"] = h_username
                     hashMap["email"] = h_email
-                    hashMap["imagen"] = ""
-                    hashMap["buscar"] = h_username.lowercase()
 
                     reference.updateChildren(hashMap).addOnCompleteListener { task2 ->
                         if (task2.isSuccessful) {

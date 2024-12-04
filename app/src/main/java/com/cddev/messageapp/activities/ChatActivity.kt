@@ -1,5 +1,6 @@
 package com.cddev.messageapp.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -76,6 +77,7 @@ class ChatActivity : AppCompatActivity() {
         val message = Message(
             text = messageText,
             senderId = FirebaseAuth.getInstance().currentUser?.uid ?: "",
+            receiverId = getOtherUser(chatId),
             timestamp = System.currentTimeMillis()
         )
 
@@ -87,6 +89,11 @@ class ChatActivity : AppCompatActivity() {
                 Toast.makeText(this, "Error al enviar mensaje", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun getOtherUser(chatId: String) : String {
+        val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
+        return chatId.replace("${currentUserId}", "")
     }
 
     private fun listenForMessages() {
@@ -107,5 +114,11 @@ class ChatActivity : AppCompatActivity() {
                 Toast.makeText(this@ChatActivity, "Error al cargar mensajes", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    override fun onBackPressed() {
+        val intent = Intent(this, Home::class.java)
+        startActivity(intent)
+        finish()
     }
 }

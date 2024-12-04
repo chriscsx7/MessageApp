@@ -19,8 +19,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_margin="16dp"
-            android:src="@drawable/ic_add"
+            android:src="@drawable/ic_add_white"
             android:contentDescription="Agregar chat"
-            android:tint="#FFFFFF"
             android:backgroundTint="#007AFF" />
 </RelativeLayout>

@@ -8,6 +8,13 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="orange">#E08F2B</color>
+    <color name="orange">#FFB74D</color>
     <color name="blue_light">#2196F3</color>
+    <color name="green">#4CAF50</color>
+
+    // variantes de azul
+    <color name="blue_200">#FF90CAF9</color>
+    <color name="blue_500">#FF2196F3</color>
+    <color name="blue_700">#FF1976D2</color>
+    <color name="blue_900">#FF0D47A1</color>
 </resources>

@@ -97,9 +97,15 @@ class AddChatActivity : AppCompatActivity() {
     private fun generateChatId(userId: String): String {
         val currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
         if (currentUserId.isNotEmpty() && userId.isNotEmpty()) {
-            return if (currentUserId < userId) "$currentUserId:$userId" else "$userId:$currentUserId"
+            return if (currentUserId < userId) "$currentUserId$userId" else "$userId$currentUserId"
         }
         return "" // Retornar cadena vacía si el usuario no está autenticado o el ID es vacío
+    }
+
+    override fun onBackPressed() {
+        val intent = Intent(this, Home::class.java)
+        startActivity(intent)
+        finish()
     }
 }
 
